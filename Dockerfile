@@ -5,8 +5,7 @@ RUN pip install flask==0.12.2
 
 COPY . ./
 
-RUN EXPORT FLASK_APP=main.py
-
 EXPOSE 5000
 
-CMD ["flask","run"]
+ENTRYPOINT [ "python" ]
+CMD ["main.py"]

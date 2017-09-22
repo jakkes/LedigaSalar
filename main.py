@@ -1,5 +1,6 @@
 import dataHandler
 from flask import Flask, send_from_directory, request, jsonify
+import os
 
 app = Flask(__name__)
 
@@ -16,4 +17,8 @@ def search():
 dataHandler.init()
 
 if __name__=='__main__':
-    app.run()
+    ENV = "development"
+    if "ENV" in os.environ:
+        ENV = os.environ["ENV"]
+
+    app.run(debug=(ENV != "production"), host="0.0.0.0")
