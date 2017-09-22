@@ -32,6 +32,8 @@ def _getRooms():
 
 def init():
     _setTimer()
+    thread = threading.Thread(target=_setModel)
+    thread.start()
 
 def _setTimer():
     now = datetime.datetime.now()
