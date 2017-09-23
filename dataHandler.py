@@ -108,4 +108,4 @@ def FreeRooms(fromHour, toHour):
             if not room in data._model[hour]:
                 rooms.remove(room)
 
-    return rooms
+    return sorted(rooms)
