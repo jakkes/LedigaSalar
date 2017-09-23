@@ -1,10 +1,14 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 from requests import get
 import json
 import datetime
 import threading
 
-_model = {}
-_rooms = ["A1","A2"]
+class data:
+    _model = {}
+    _rooms = ["A1","A2"]
 
 def _getDepartments():
     try:
@@ -26,12 +30,15 @@ def _getEntries(courseCode):
 
 def _getRooms():
     try:
-        return json.loads(get("https://www.kth.se/api/places/v2/places").text)
+        rooms = []
+        data = json.loads(get("https://www.kth.se/api/places/v2/places").text)
+        for room in data:
+            rooms.append(room["name"])
+        return rooms
     except json.JSONDecodeError:
         return []
 
 def init():
-    _setTimer()
     thread = threading.Thread(target=_setModel)
     thread.start()
 
@@ -57,9 +64,7 @@ def _setModel():
 
     model = {}
     for h in range(now.hour,23):
-        model[h] = [];
-        for room in rooms:
-            model[h].append(room["name"])
+        model[h] = rooms[:]
 
     for dep in deps:
         courses = _getCourses(dep["code"])
@@ -78,28 +83,28 @@ def _setModel():
                     for location in locations:
                         model[hour].remove(location["name"])
 
-    _model = model
-    _rooms = rooms
+    data._model = model
+    data._rooms = rooms
 
     print("Model set.")
     _setTimer()
 
 def FreeRooms(fromHour, toHour):
     
-    rooms = None;
+    rooms = None
     
     while rooms == None and fromHour < toHour:
-        if fromHour in _model.keys():
-            rooms = _model[fromHour]
+        if fromHour in data._model.keys():
+            rooms = data._model[fromHour]
         else:
             fromHour += 1
 
     if rooms == None:
-        return _rooms
+        return data._rooms
 
-    for hour in range(fromHour + 1, endHour - 1):
+    for hour in range(fromHour + 1, toHour - 1):
         for room in rooms:
-            if not room in _model[hour]:
+            if not room in data._model[hour]:
                 rooms.remove(room)
 
     return rooms

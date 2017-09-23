@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import dataHandler
 from flask import Flask, send_from_directory, request, jsonify
 import os
@@ -21,4 +24,5 @@ if __name__=='__main__':
     if "ENV" in os.environ:
         ENV = os.environ["ENV"]
 
-    app.run(debug=(ENV != "production"), host="0.0.0.0")
+    #app.run(debug=(ENV != "production"), host="0.0.0.0")
+    app.run(debug=False, host="0.0.0.0")
