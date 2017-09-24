@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from requests import get
 import json
 import datetime
 import threading
+from requests import get
 
-class data:
-    _model = {}
-    _rooms = ["A1","A2"]
+class Data:
+    Model = {}
+    Rooms = ["A1","A2"]
 
 def _getDepartments():
     try:
@@ -61,7 +61,8 @@ def _setModel():
     deps = _getDepartments()
     rooms = _getRooms()
 
-    now = datetime.datetime.now()
+    now = datetime.datetime.now() + datetime.timedelta(days=3)
+    now = now - datetime.timedelta(hours = now.hour - 1)
 
     model = {}
     for h in range(now.hour,23):
@@ -75,17 +76,21 @@ def _setModel():
                 start = datetime.datetime.strptime(entry["start"], "%Y-%m-%d %H:%M:%S")
                 end = datetime.datetime.strptime(entry["end"], "%Y-%m-%d %H:%M:%S")
                 
-                if start.date() != now.date() or end.date != now.date():
+                startE = start.date() == now.date()
+                endE = end.date() == now.date()
+
+                if startE == False or endE == False:
                     continue
 
                 locations = entry["locations"]
 
                 for hour in range(start.hour, end.hour - 1):
                     for location in locations:
-                        model[hour].remove(location["name"])
+                        if location["name"] in model[hour]:
+                            model[hour].remove(location["name"])
 
-    data._model = model
-    data._rooms = rooms
+    Data.Model = model
+    Data.Rooms = rooms
 
     print("Model set.")
     _setTimer()
@@ -95,17 +100,17 @@ def FreeRooms(fromHour, toHour):
     rooms = None
     
     while rooms == None and fromHour < toHour:
-        if fromHour in data._model.keys():
-            rooms = data._model[fromHour]
+        if fromHour in Data.Model.keys():
+            rooms = Data.Model[fromHour][:]
         else:
             fromHour += 1
 
     if rooms == None:
-        return data._rooms
+        return Data.Rooms
 
     for hour in range(fromHour + 1, toHour - 1):
         for room in rooms:
-            if not room in data._model[hour]:
+            if not room in Data.Model[hour]:
                 rooms.remove(room)
 
     return sorted(rooms)
