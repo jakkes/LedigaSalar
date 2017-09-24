@@ -7,15 +7,6 @@ from flask import Flask, send_from_directory, request, jsonify, redirect
 
 app = Flask(__name__)
 
-# Redirect to https://
-@app.before_request
-def before_request():
-    if request.url.startswith('http://'):
-        url = request.url.replace('http://', 'https://', 1)
-        code = 301
-        return redirect(url, code=code)
-
-
 @app.route("/")
 def index():
     return send_from_directory("","index.html")
