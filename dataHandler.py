@@ -61,8 +61,7 @@ def _setModel():
     deps = _getDepartments()
     rooms = _getRooms()
 
-    now = datetime.datetime.now() + datetime.timedelta(days=3)
-    now = now - datetime.timedelta(hours = now.hour - 1)
+    now = datetime.datetime.now()
 
     model = {}
     for h in range(now.hour,23):
