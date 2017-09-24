@@ -98,14 +98,14 @@ def FreeRooms(fromHour, toHour):
     
     rooms = None
     
-    while rooms == None and fromHour < toHour:
+    while rooms is None and fromHour < toHour:
         if fromHour in Data.Model.keys():
             rooms = Data.Model[fromHour][:]
         else:
             fromHour += 1
 
-    if rooms == None:
-        return Data.Rooms
+    if rooms is None:
+        return sorted(Data.Rooms[:])
 
     for hour in range(fromHour + 1, toHour - 1):
         for room in rooms:
