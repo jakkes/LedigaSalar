@@ -84,6 +84,8 @@ def _setModel():
                 locations = entry["locations"]
 
                 for hour in range(start.hour, end.hour - 1):
+                    if hour not in model:
+                        continue
                     for location in locations:
                         if location["name"] in model[hour]:
                             model[hour].remove(location["name"])
