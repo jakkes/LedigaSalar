@@ -78,12 +78,12 @@ def _setModel():
                 startE = start.date() == now.date()
                 endE = end.date() == now.date()
 
-                if startE == False or endE == False:
+                if startE is False or endE is False:
                     continue
 
                 locations = entry["locations"]
 
-                for hour in range(start.hour, end.hour - 1):
+                for hour in range(start.hour, end.hour):
                     if hour not in model:
                         continue
                     for location in locations:
@@ -99,7 +99,7 @@ def _setModel():
 def FreeRooms(fromHour, toHour):
     
     rooms = None
-    
+
     while rooms is None and fromHour < toHour:
         if fromHour in Data.Model.keys():
             rooms = Data.Model[fromHour][:]
@@ -109,7 +109,7 @@ def FreeRooms(fromHour, toHour):
     if rooms is None:
         return sorted(Data.Rooms[:])
 
-    for hour in range(fromHour + 1, toHour - 1):
+    for hour in range(fromHour + 1, toHour):
         for room in rooms:
             if not room in Data.Model[hour]:
                 rooms.remove(room)
