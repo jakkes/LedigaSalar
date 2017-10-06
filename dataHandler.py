@@ -14,20 +14,32 @@ class Data:
 def _getDepartments():
     try:
         return json.loads(get("https://www.kth.se/api/kopps/v2/departments.sv.json").text)
-    except json.JSONDecodeError, Exception:
+    except json.JSONDecodeError:
+        return []
+    except Exception:
+        print("General exception in _getDepartments()")
+        print(e)
         return []
 
 def _getCourses(depCode):
     try:
         return json.loads(get("https://www.kth.se/api/kopps/v2/courses/{0}.json".format(depCode)).text)["courses"]
-    except json.JSONDecodeError, Exception:
+    except json.JSONDecodeError:
+        return []
+    except Exception:
+        print("General exception in _getCourses()")
+        print(e)
         return []
 
 def _getEntries(courseCode):
     try:
         return json.loads(get("https://www.kth.se/api/schema/v2/course/{0}".format(courseCode)).text)
-    except json.JSONDecodeError, Exception:
+    except json.JSONDecodeError:
         return json.loads('{"entries":[]}')
+    except Exception:
+        print("General exception in _getEntries()")
+        print(e)
+        return []
 
 def _getRooms():
     try:
@@ -36,7 +48,11 @@ def _getRooms():
         for room in data:
             rooms.append(room["name"])
         return rooms
-    except json.JSONDecodeError, Exception:
+    except json.JSONDecodeError:
+        return []
+    except Exception as e:
+        print("General exception in _getRooms()")
+        print(e)
         return []
 
 def init():
