@@ -6,6 +6,7 @@ import datetime
 import threading
 from requests import get
 
+
 class Data:
     Model = {}
     Rooms = ["A1","A2"]
@@ -13,19 +14,19 @@ class Data:
 def _getDepartments():
     try:
         return json.loads(get("https://www.kth.se/api/kopps/v2/departments.sv.json").text)
-    except json.JSONDecodeError:
+    except json.JSONDecodeError, Exception:
         return []
 
 def _getCourses(depCode):
     try:
         return json.loads(get("https://www.kth.se/api/kopps/v2/courses/{0}.json".format(depCode)).text)["courses"]
-    except json.JSONDecodeError:
+    except json.JSONDecodeError, Exception:
         return []
 
 def _getEntries(courseCode):
     try:
         return json.loads(get("https://www.kth.se/api/schema/v2/course/{0}".format(courseCode)).text)
-    except json.JSONDecodeError:
+    except json.JSONDecodeError, Exception:
         return json.loads('{"entries":[]}')
 
 def _getRooms():
@@ -35,7 +36,7 @@ def _getRooms():
         for room in data:
             rooms.append(room["name"])
         return rooms
-    except json.JSONDecodeError:
+    except json.JSONDecodeError, Exception:
         return []
 
 def init():
