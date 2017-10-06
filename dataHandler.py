@@ -16,7 +16,7 @@ def _getDepartments():
         return json.loads(get("https://www.kth.se/api/kopps/v2/departments.sv.json").text)
     except json.JSONDecodeError:
         return []
-    except Exception:
+    except Exception as e:
         print("General exception in _getDepartments()")
         print(e)
         return []
@@ -26,7 +26,7 @@ def _getCourses(depCode):
         return json.loads(get("https://www.kth.se/api/kopps/v2/courses/{0}.json".format(depCode)).text)["courses"]
     except json.JSONDecodeError:
         return []
-    except Exception:
+    except Exception as e:
         print("General exception in _getCourses()")
         print(e)
         return []
@@ -36,7 +36,7 @@ def _getEntries(courseCode):
         return json.loads(get("https://www.kth.se/api/schema/v2/course/{0}".format(courseCode)).text)
     except json.JSONDecodeError:
         return json.loads('{"entries":[]}')
-    except Exception:
+    except Exception as e:
         print("General exception in _getEntries()")
         print(e)
         return []
