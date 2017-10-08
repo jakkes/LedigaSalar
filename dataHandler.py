@@ -4,12 +4,15 @@
 import json
 import datetime
 import threading
+import logging
 from requests import get
 
+logging.Logger("DataHandler")
 
 class Data:
     Model = {}
     Rooms = ["A1","A2"]
+    Valid = None
 
 def _getDepartments():
     try:
@@ -17,8 +20,8 @@ def _getDepartments():
     except json.JSONDecodeError:
         return []
     except Exception as e:
-        print("General exception in _getDepartments()")
-        print(e)
+        logging.error("Exception in _getDepartments")
+        logging.error(e)
         return []
 
 def _getCourses(depCode):
@@ -27,8 +30,8 @@ def _getCourses(depCode):
     except json.JSONDecodeError:
         return []
     except Exception as e:
-        print("General exception in _getCourses()")
-        print(e)
+        logging.error("Exception in _getCourses, department " + depCode)
+        logging.error(e)
         return []
 
 def _getEntries(courseCode):
@@ -37,8 +40,8 @@ def _getEntries(courseCode):
     except json.JSONDecodeError:
         return json.loads('{"entries":[]}')
     except Exception as e:
-        print("General exception in _getEntries()")
-        print(e)
+        logging.error("Exception in _getEntries, course " + courseCode)
+        logging.error(e)
         return []
 
 def _getRooms():
@@ -51,8 +54,8 @@ def _getRooms():
     except json.JSONDecodeError:
         return []
     except Exception as e:
-        print("General exception in _getRooms()")
-        print(e)
+        logging.error("Exception in _getRooms")
+        logging.error(e)
         return []
 
 def init():
@@ -73,7 +76,7 @@ def _setTimer():
 
 def _setModel():
 
-    print("Setting new model")
+    logging.info("Setting new model")
 
     deps = _getDepartments()
     rooms = _getRooms()
@@ -109,6 +112,7 @@ def _setModel():
 
     Data.Model = model
     Data.Rooms = rooms
+    Data.Valid = now.date()
 
     print("Model set.")
     _setTimer()
@@ -131,4 +135,7 @@ def FreeRooms(fromHour, toHour):
             if not room in Data.Model[hour]:
                 rooms.remove(room)
 
-    return sorted(rooms)
+    return {
+        "valid": Data.Valid,
+        "rooms": sorted(rooms)
+    }
