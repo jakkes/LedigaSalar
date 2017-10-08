@@ -59,7 +59,7 @@ def _getRooms():
         return []
 
 def init():
-    print("Initiating dataHandler.")
+    logging.info("Initiating dataHandler.")
     thread = threading.Thread(target=_setModel)
     thread.start()
 
