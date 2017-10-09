@@ -126,7 +126,7 @@ def FreeRooms(fromHour, toHour):
             fromHour += 1
 
     if rooms is None:
-        return sorted(Data.Rooms[:])
+        rooms = Data.Rooms[:]
 
     for hour in range(fromHour + 1, toHour):
         for room in rooms:
