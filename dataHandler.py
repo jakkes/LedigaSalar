@@ -7,8 +7,6 @@ import threading
 import logging
 from requests import get
 
-logging.Logger("DataHandler")
-
 class Data:
     Model = {}
     Rooms = ["A1","A2"]
@@ -69,7 +67,7 @@ def _setTimer():
 
     secondsLeft = (nextRun - now).seconds
 
-    print("Setting new model in {0} seconds".format(str(secondsLeft)))
+    logging.info("Setting new model in {0} seconds".format(str(secondsLeft)))
 
     t = threading.Timer(secondsLeft,_setModel)
     t.start()
@@ -114,7 +112,7 @@ def _setModel():
     Data.Rooms = rooms
     Data.Valid = now.date()
 
-    print("Model set.")
+    logging.info("Model set.")
     _setTimer()
 
 def FreeRooms(fromHour, toHour):

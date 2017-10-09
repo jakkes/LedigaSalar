@@ -3,7 +3,10 @@
 
 import dataHandler
 import os
-from flask import Flask, send_from_directory, request, jsonify, redirect
+import logging
+from flask import Flask, send_from_directory, request, jsonify
+
+logging.basicConfig(level=logging.INFO)
 
 app = Flask(__name__)
 
