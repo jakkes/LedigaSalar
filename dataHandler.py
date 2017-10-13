@@ -129,6 +129,8 @@ def FreeRooms(fromHour, toHour):
         rooms = Data.Rooms[:]
 
     for hour in range(fromHour + 1, toHour):
+        if not hour in Data.Model.keys():
+            continue
         for room in rooms:
             if not room in Data.Model[hour]:
                 rooms.remove(room)
